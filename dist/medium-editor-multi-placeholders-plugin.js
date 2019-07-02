@@ -31,6 +31,9 @@ var MediumEditorMultiPlaceholders = MediumEditor.Extension.extend({
 
   showPlaceholder: function (el) {
       if (el) {
+          if (!el.getAttribute('data-placeholder')) {
+              el.setAttribute('data-placeholder', this.placeholders[this.placeholders.length - 1].text);
+          }
           el.classList.add('medium-editor-placeholder');
       }
   },
@@ -42,7 +45,6 @@ var MediumEditorMultiPlaceholders = MediumEditor.Extension.extend({
   },
 
   updatePlaceholder: function (el) {
-      // if one of these element ('img, blockquote, ul, ol') are found inside the given element, we won't display the placeholder
       if (el.textContent === '') {
           return this.showPlaceholder(el);
       }
@@ -50,7 +52,7 @@ var MediumEditorMultiPlaceholders = MediumEditor.Extension.extend({
   },
 
   updateAllPlaceholders: function() {
-    this.placeholderElements.map(function(el){
+      this.base.elements[0].querySelectorAll(['p', 'h2', 'h3']).forEach(function(el){
       this.updatePlaceholder(el);
     }, this);
   },
